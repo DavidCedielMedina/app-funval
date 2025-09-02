@@ -77,6 +77,9 @@ const listarEstudiantes = (estudiantes) => {
     const tdPais = document.createElement("td");
     tdPais.textContent = estudiante.pais;
     tdPais.className = "py-3 px-4 text-center";
+    const tdNotas = document.createElement("td");
+    tdNotas.textContent = `[${estudiante.notas.join(", ")}]`;
+    tdNotas.className = "py-3 px-4 text-center";
     const tdPromedio = document.createElement("td");
     tdPromedio.textContent = promedioNota.toFixed(2);
     tdPromedio.className =
@@ -92,7 +95,6 @@ const listarEstudiantes = (estudiantes) => {
     `;
 
      tdActions.querySelector(".edit").addEventListener("click", () => {
-    //   document.getElementById("inputId").value = estudiante.id;
       document.getElementById("inputNombre").value = estudiante.nombre;
       document.getElementById("inputEdad").value = estudiante.edad;
       document.getElementById("inputPais").value = estudiante.pais;
@@ -104,6 +106,7 @@ const listarEstudiantes = (estudiantes) => {
     tr.appendChild(tdNombre);
     tr.appendChild(tdEdad);
     tr.appendChild(tdPais);
+    tr.appendChild(tdNotas);
     tr.appendChild(tdPromedio);
     tr.appendChild(tdActions);
     tbody.appendChild(tr);
@@ -111,3 +114,37 @@ const listarEstudiantes = (estudiantes) => {
 };
 
 listarEstudiantes(estudiantes)
+
+const tbodyTabla = document.getElementById("tabla-tbody");
+
+tbodyTabla.addEventListener("click", (e) => {
+  const target = e.target.closest("svg");
+  if (!target) return;
+
+  const tr = target.closest("tr");
+  const nombre = tr.querySelector("td:first-child").textContent;
+  const estudiante = estudiantes.find(est => est.nombre === nombre);
+
+  
+  if (target.outerHTML.includes('text-blue-700')) { 
+    const nuevaNota = parseFloat(prompt("Ingresa la nueva nota:"));
+    if (!isNaN(nuevaNota)) {
+      estudiante.notas.push(nuevaNota);
+
+     
+      const sumaNotas = estudiante.notas.reduce((acc, n) => acc + n, 0);
+      const promedioNota = sumaNotas / estudiante.notas.length;
+
+     
+      const tdNotas = tr.querySelector("td:nth-child(4)");
+      tdNotas.textContent = `[${estudiante.notas.join(", ")}]`;
+
+      
+      const tdPromedio = tr.querySelector("td:nth-child(5)");
+      tdPromedio.textContent = promedioNota.toFixed(2);
+      tdPromedio.className =
+        "py-3 px-4 font-semibold text-center " +
+        (promedioNota >= 70 ? "text-green-600" : "text-yellow-600");
+    }
+  }
+});
