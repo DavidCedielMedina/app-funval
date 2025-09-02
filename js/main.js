@@ -39,15 +39,18 @@ const estudiantes = [
 
   openBtn.addEventListener("click", () => {
     modal.classList.remove("hidden");
+      modal.classList.add("flex");
   });
 
   closeBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
+      modal.classList.remove("flex");
   });
 
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.classList.add("hidden");
+      modal.classList.remove("flex");
     }
   });
 
@@ -81,10 +84,22 @@ const listarEstudiantes = (estudiantes) => {
       (promedioNota >= 70 ? "text-green-600" : "text-yellow-600");
     const tdActions = document.createElement("td");
     tdActions.innerHTML=`
-    <div class="flex gap-3 cursor-pointer ">
-    ${iconDelete} ${iconEdit} ${iconAdd}
-    </div>
+    <div class="flex gap-3 cursor-pointer">
+        <span class="delete">${iconDelete}</span>
+        <span class="edit">${iconEdit}</span>
+        <span class="add">${iconAdd}</span>
+      </div>
     `;
+
+     tdActions.querySelector(".edit").addEventListener("click", () => {
+    //   document.getElementById("inputId").value = estudiante.id;
+      document.getElementById("inputNombre").value = estudiante.nombre;
+      document.getElementById("inputEdad").value = estudiante.edad;
+      document.getElementById("inputPais").value = estudiante.pais;
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    });
 
     tr.appendChild(tdNombre);
     tr.appendChild(tdEdad);
